@@ -24,6 +24,8 @@ public class Burocrata {
     private int estresse = 0;
     private Mesa mesa;
     private Universidade universidade;
+    private int naoDespachadoCount = 0;
+    private int listaVaziaCount = 0;
 
     /**
      * Construtor de Burocrata.
@@ -76,9 +78,9 @@ public class Burocrata {
      * @see professor.entidades.Universidade#devolverDocumentoParaMonteDoCurso(estudantes.entidades.Documento, professor.entidades.CodigoCurso)
      */
     public void trabalhar() {
-        LinkedList<Documento> todosOsDocumentosDosCursos = getTodosDocumentosDosCursos();
+        List<Documento> todosOsDocumentosDosCursos = getTodosDocumentosDosCursos();
         Collections.shuffle(todosOsDocumentosDosCursos); // aleatoriza os documentos;
-        System.out.println("Tamanho de lista de todos os Documentos:" + todosOsDocumentosDosCursos.size());
+//        System.out.println("Tamanho de lista de todos os Documentos:" + todosOsDocumentosDosCursos.size());
 
         Processo processo1 = mesa.getProcesso(0);
         Processo processo2 = mesa.getProcesso(1);
@@ -86,53 +88,33 @@ public class Burocrata {
         Processo processo4 = mesa.getProcesso(3);
         Processo processo5 = mesa.getProcesso(4);
 
+        gerenciarProcesso(processo1);
+        gerenciarProcesso(processo2);
+        gerenciarProcesso(processo3);
+        gerenciarProcesso(processo4);
+        gerenciarProcesso(processo5);
 
-        LinkedList<Documento> finalAllDocumentos1 = todosOsDocumentosDosCursos;
-        Collections.shuffle(todosOsDocumentosDosCursos); // aleatoriza os documentos;
-        todosOsDocumentosDosCursos.forEach(doc -> {
-            verificarSeAdicionaDocumentoNoProcesso(processo1, doc, finalAllDocumentos1);
-        });
         despacharProcesso(processo1, 1);
-
-        todosOsDocumentosDosCursos = getTodosDocumentosDosCursos();
-        LinkedList<Documento> finalAllDocumentos2 = todosOsDocumentosDosCursos;
-        Collections.shuffle(todosOsDocumentosDosCursos); // aleatoriza os documentos;
-        todosOsDocumentosDosCursos.forEach(doc -> {
-            verificarSeAdicionaDocumentoNoProcesso(processo2, doc, finalAllDocumentos2);
-        });
         despacharProcesso(processo2, 2);
-
-        todosOsDocumentosDosCursos = getTodosDocumentosDosCursos();
-        LinkedList<Documento> finalAllDocumentos3 = todosOsDocumentosDosCursos;
-        Collections.shuffle(todosOsDocumentosDosCursos); // aleatoriza os documentos;
-        todosOsDocumentosDosCursos.forEach(doc -> {
-            verificarSeAdicionaDocumentoNoProcesso(processo3, doc, finalAllDocumentos3);
-        });
         despacharProcesso(processo3, 3);
-
-        todosOsDocumentosDosCursos = getTodosDocumentosDosCursos();
-        LinkedList<Documento> finalAllDocumentos4 = todosOsDocumentosDosCursos;
-        Collections.shuffle(todosOsDocumentosDosCursos); // aleatoriza os documentos;
-        todosOsDocumentosDosCursos.forEach(doc -> {
-            verificarSeAdicionaDocumentoNoProcesso(processo4, doc, finalAllDocumentos4);
-        });
         despacharProcesso(processo4, 4);
-
-        todosOsDocumentosDosCursos = getTodosDocumentosDosCursos();
-        LinkedList<Documento> finalAllDocumentos5 = todosOsDocumentosDosCursos;
-        Collections.shuffle(todosOsDocumentosDosCursos); // aleatoriza os documentos;
-        todosOsDocumentosDosCursos.forEach(doc -> {
-            verificarSeAdicionaDocumentoNoProcesso(processo5, doc, finalAllDocumentos5);
-        });
         despacharProcesso(processo5, 5);
     }
 
-    private LinkedList<Documento> getTodosDocumentosDosCursos() {
+    private void gerenciarProcesso(Processo processo) {
+        List<Documento> finalTodosDocumentos = getTodosDocumentosDosCursos();
+        Collections.shuffle(finalTodosDocumentos); // aleatoriza os documentos;
+        finalTodosDocumentos.forEach(doc -> {
+            verificarSeAdicionaDocumentoNoProcesso(processo, doc);
+        });
+    }
+
+    private List<Documento> getTodosDocumentosDosCursos() {
         var codigosCursos = List.of(GRADUACAO_CIENCIA_DA_COMPUTACAO, GRADUACAO_ENGENHARIA_AGRICOLA,
                 GRADUACAO_ENGENHARIA_CIVIL, GRADUACAO_ENGENHARIA_ELETRICA, GRADUACAO_ENGENHARIA_MECANICA,
                 GRADUACAO_ENGENHARIA_SOFTWARE, GRADUACAO_ENGENHARIA_TELECOMUNICACOES, POS_GRADUACAO_ENGENHARIA,
                 POS_GRADUACAO_ENGENHARIA_ELETRICA, POS_GRADUACAO_ENGENHARIA_SOFTWARE);
-        LinkedList<Documento> allDocumentos = new LinkedList<>();
+        List<Documento> allDocumentos = new ArrayList<>();
         codigosCursos.forEach(codigoCurso -> {
             allDocumentos.addAll(List.of(universidade.pegarCopiaDoMonteDoCurso(codigoCurso)));
         });
@@ -145,40 +127,44 @@ public class Burocrata {
         if (!isListaDeDocumentosVazia(documentos)) {
             if (!isTodosDocumentosAtas(documentos)) {
                 universidade.despachar(processo);
-                System.out.println("Processo " + numeroProcesso + " despachado.");
+//                System.out.println("Processo " + numeroProcesso + " despachado.");
             } else {
                 // Remove o último elemento, garantindo que não vai ficar travado só com Ata
                 processo.removerDocumento(documentos[documentos.length - 1]);
-                System.out.println("Processo " + numeroProcesso + " não despachado.");
+                naoDespachadoCount++;
+//                System.out.println("Processo " + numeroProcesso + " não despachado.");
             }
+        } else {
+            listaVaziaCount++;
         }
+//        System.out.println("Vezes lista vazia: " + listaVaziaCount);
+//        System.out.println("Vezes não despachado: " + naoDespachadoCount);
+
     }
-
-    private void verificarSeAdicionaDocumentoNoProcesso(Processo processo, Documento documento,
-                                                        LinkedList<Documento> allDocumentos) {
-
-        Documento[] documentos = processo.pegarCopiaDoProcesso();
-
-        boolean isListaDeDocumentosVazia = isListaDeDocumentosVazia(documentos);
-        boolean deveAdicionarPorNivelDeEducacao = verificarSeAdicionaDocumentoPorNivelDeEducacao(documentos, documento);
-        boolean deveAdicionarPorTipo = verificarSeAdicionarDocumentoPorTipo(documentos, documento);
-        boolean deveAdicionarPorQuantidadeDePaginas = verificarSeAdicionaDocumentoPorQuantidadeDePaginas(documentos, documento);
-        boolean deveAdicionarPorDocumentoSubstancial = verificarSeAdicionaDocumentoSubstancial(documentos, documento);
-        boolean deveAdicionarPorDestinatarioDeOficioECircular =
-                verificarSeAdicionaDocumentoCasoCircularesEOficio(documentos, documento);
-        boolean deveAdicionarPorDiploma = verificarSeAdicionaDocumentoCasoDiploma(documentos, documento);
-        boolean deveAdicionarPorCategoriaAtestado = verificarSeAdicionaDocumentoCasoAtestado(documentos, documento);
-        boolean isValidAtaHandler = verificarSeAdicionaAtaVerificandoPorElementoAnterior(documentos, documento);
-
-//        printResultadoDasVerificacoesParaAdicionarDocumentos(isListaDeDocumentosVazia,
+    //        printResultadoDasVerificacoesParaAdicionarDocumentos(isListaDeDocumentosVazia,
 //                deveAdicionarPorNivelDeEducacao, deveAdicionarPorTipo, deveAdicionarPorQuantidadeDePaginas,
 //                deveAdicionarPorDocumentoSubstancial, deveAdicionarPorDestinatarioDeOficioECircular,
 //                deveAdicionarPorDiploma, deveAdicionarPorCategoriaAtestado);
 
-        if (isListaDeDocumentosVazia && documento.getClass() != Ata.class) {
+    private void verificarSeAdicionaDocumentoNoProcesso(Processo processo, Documento documento) {
+
+        Documento[] documentos = processo.pegarCopiaDoProcesso();
+
+        boolean isListaDeDocumentosVazia = isListaDeDocumentosVazia(documentos);
+        if (isListaDeDocumentosVazia && !(documento instanceof Ata)) {
             processo.adicionarDocumento(documento);
             universidade.removerDocumentoDoMonteDoCurso(documento, documento.getCodigoCurso());
         } else {
+            boolean deveAdicionarPorNivelDeEducacao = verificarSeAdicionaDocumentoPorNivelDeEducacao(documentos, documento);
+            boolean deveAdicionarPorTipo = verificarSeAdicionarDocumentoPorTipo(documentos, documento);
+            boolean deveAdicionarPorQuantidadeDePaginas = verificarSeAdicionaDocumentoPorQuantidadeDePaginas(documentos, documento);
+            boolean deveAdicionarPorDocumentoSubstancial = verificarSeAdicionaDocumentoSubstancial(documentos, documento);
+            boolean deveAdicionarPorDestinatarioDeOficioECircular =
+                    verificarSeAdicionaDocumentoCasoCircularesEOficio(documentos, documento);
+            boolean deveAdicionarPorDiploma = verificarSeAdicionaDocumentoCasoDiploma(documentos, documento);
+            boolean deveAdicionarPorCategoriaAtestado = verificarSeAdicionaDocumentoCasoAtestado(documentos, documento);
+            boolean isValidAtaHandler = verificarSeAdicionaAtaVerificandoPorElementoAnterior(documentos, documento);
+
             if (deveAdicionarPorNivelDeEducacao
                     && deveAdicionarPorTipo
                     && deveAdicionarPorQuantidadeDePaginas
@@ -383,7 +369,7 @@ public class Burocrata {
     private void printTodosTiposDeDocumentosPresentesNaListaDeDocumentos(Documento[] documentos) {
         System.out.println("=================================");
         Arrays.stream(documentos).forEach(
-                documento -> System.out.println(documento.getClass()));
+                documento -> System.out.println(documento.getClass() + " | " + documento.getPaginas()));
         System.out.println("=================================");
     }
 
