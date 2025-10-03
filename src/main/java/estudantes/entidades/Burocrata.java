@@ -217,7 +217,7 @@ public class Burocrata {
             return true;
         }
         // Se chegou aqui, ele é Circular ou Oficio
-        var processoJaContemCircularOuOficio = Arrays.stream(documentos)
+       boolean processoJaContemCircularOuOficio = Arrays.stream(documentos)
                 .anyMatch(doc -> doc instanceof Oficio || doc instanceof Circular);
         if (!processoJaContemCircularOuOficio) {
             return true;
