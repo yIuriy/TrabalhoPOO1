@@ -23,7 +23,7 @@ public class Edital extends Norma{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Edital edital = (Edital) o;
-        return Objects.deepEquals(responsaveis, edital.responsaveis);
+        return Arrays.equals(responsaveis, edital.responsaveis);
     }
 
     @Override
