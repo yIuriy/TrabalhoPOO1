@@ -1,9 +1,14 @@
 package estudantes.entidades;
 
-import professor.entidades.*;
+import professor.entidades.CodigoCurso;
+import professor.entidades.Mesa;
+import professor.entidades.Processo;
+import professor.entidades.Universidade;
 
-import javax.print.Doc;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static professor.entidades.CodigoCurso.*;
@@ -23,9 +28,13 @@ import static professor.entidades.CodigoCurso.*;
  */
 public class Burocrata {
     private int estresse = 0;
-    private Mesa mesa;
-    private Universidade universidade;
-
+    private final Mesa mesa;
+    private final Universidade universidade;
+    private static final List<CodigoCurso> CODIGOS_CURSOS = List.of(GRADUACAO_CIENCIA_DA_COMPUTACAO,
+            GRADUACAO_ENGENHARIA_AGRICOLA,
+            GRADUACAO_ENGENHARIA_CIVIL, GRADUACAO_ENGENHARIA_ELETRICA, GRADUACAO_ENGENHARIA_MECANICA,
+            GRADUACAO_ENGENHARIA_SOFTWARE, GRADUACAO_ENGENHARIA_TELECOMUNICACOES, POS_GRADUACAO_ENGENHARIA,
+            POS_GRADUACAO_ENGENHARIA_ELETRICA, POS_GRADUACAO_ENGENHARIA_SOFTWARE);
     /**
      * Construtor de Burocrata.
      *
@@ -86,19 +95,15 @@ public class Burocrata {
 
     private void gerenciarProcesso(Processo processo) {
         ArrayList<Documento> finalTodosDocumentos = getTodosDocumentosDosCursos();
-        Collections.shuffle(finalTodosDocumentos); // aleatoriza os documentos;
+        Collections.shuffle(finalTodosDocumentos);
         for (Documento doc : finalTodosDocumentos) {
             verificarSeAdicionaDocumentoNoProcesso(processo, doc);
         }
     }
 
     private ArrayList<Documento> getTodosDocumentosDosCursos() {
-        var codigosCursos = List.of(GRADUACAO_CIENCIA_DA_COMPUTACAO, GRADUACAO_ENGENHARIA_AGRICOLA,
-                GRADUACAO_ENGENHARIA_CIVIL, GRADUACAO_ENGENHARIA_ELETRICA, GRADUACAO_ENGENHARIA_MECANICA,
-                GRADUACAO_ENGENHARIA_SOFTWARE, GRADUACAO_ENGENHARIA_TELECOMUNICACOES, POS_GRADUACAO_ENGENHARIA,
-                POS_GRADUACAO_ENGENHARIA_ELETRICA, POS_GRADUACAO_ENGENHARIA_SOFTWARE);
         ArrayList<Documento> todosDocumentos = new ArrayList<>();
-        for (CodigoCurso codigoCurso : codigosCursos) {
+        for (CodigoCurso codigoCurso : CODIGOS_CURSOS) {
             todosDocumentos.addAll(List.of(universidade.pegarCopiaDoMonteDoCurso(codigoCurso)));
         }
         return todosDocumentos;
@@ -110,8 +115,9 @@ public class Burocrata {
         if (!isListaDeDocumentosVazia(documentos)) {
             if (!isTodosDocumentosAtas(documentos)) {
                 universidade.despachar(processo);
-//                System.out.println("Processo " + numeroProcesso + " despachado.");
+                System.out.println("Processo " + numeroProcesso + " despachado.");
             } else {
+                System.out.println("Processo " + numeroProcesso + "não despachado.");
                 // Remove o último elemento, garantindo que não vai ficar travado só com Ata
                 Documento documento = documentos[documentos.length - 1];
                 processo.removerDocumento(documento);
@@ -119,10 +125,6 @@ public class Burocrata {
             }
         }
     }
-    //        printResultadoDasVerificacoesParaAdicionarDocumentos(isListaDeDocumentosVazia,
-//                deveAdicionarPorNivelDeEducacao, deveAdicionarPorTipo, deveAdicionarPorQuantidadeDePaginas,
-//                deveAdicionarPorDocumentoSubstancial, deveAdicionarPorDestinatarioDeOficioECircular,
-//                deveAdicionarPorDiploma, deveAdicionarPorCategoriaAtestado);
 
     private void verificarSeAdicionaDocumentoNoProcesso(Processo processo, Documento documento) {
 
@@ -130,10 +132,7 @@ public class Burocrata {
 
         if (verificarSeJaExisteDocumentoSubstancial(documentos)) return;
         boolean isListaDeDocumentosVazia = isListaDeDocumentosVazia(documentos);
-        if (isListaDeDocumentosVazia && !(documento instanceof Ata)) {
-            processo.adicionarDocumento(documento);
-            universidade.removerDocumentoDoMonteDoCurso(documento, documento.getCodigoCurso());
-        } else {
+        if (!isListaDeDocumentosVazia || documento instanceof Ata) {
             if (!verificarSeAdicionaDocumentoPorNivelDeEducacao(documentos, documento)) return;
             if (!verificarSeAdicionarDocumentoPorTipo(documentos, documento)) return;
             if (!verificarSeAdicionaDocumentoPorQuantidadeDePaginas(documentos, documento)) return;
@@ -142,9 +141,9 @@ public class Burocrata {
             if (!verificarSeAdicionaDocumentoCasoDiploma(documentos, documento)) return;
             if (!verificarSeAdicionaDocumentoCasoAtestado(documentos, documento)) return;
             if (!verificarSeAdicionaAtaVerificandoPorElementoAnterior(documentos, documento)) return;
-            processo.adicionarDocumento(documento);
-            universidade.removerDocumentoDoMonteDoCurso(documento, documento.getCodigoCurso());
         }
+        processo.adicionarDocumento(documento);
+        universidade.removerDocumentoDoMonteDoCurso(documento, documento.getCodigoCurso());
     }
 
     private boolean isListaDeDocumentosVazia(Documento[] documentos) {
@@ -160,9 +159,9 @@ public class Burocrata {
 
     // Funcionando corretamente
     private boolean verificarSeAdicionaDocumentoPorNivelDeEducacao(Documento[] documentos, Documento documento) {
-        if (isDocumentoDePosGraduacao(documento)) { // é pós graduação
+        if (isDocumentoDePosGraduacao(documento)) { // é pós-graduação
             return Arrays.stream(documentos).allMatch(this::isDocumentoDePosGraduacao);
-        } else { // é de graduacao
+        } else { // é de graduação
             return Arrays.stream(documentos).noneMatch(this::isDocumentoDePosGraduacao);
         }
     }
@@ -218,7 +217,7 @@ public class Burocrata {
             return true;
         }
         // Se chegou aqui, ele é Circular ou Oficio
-        var processoJaContemCircularOuOficio = Arrays.stream(documentos)
+        boolean processoJaContemCircularOuOficio = Arrays.stream(documentos)
                 .anyMatch(doc -> doc instanceof Oficio || doc instanceof Circular);
         if (!processoJaContemCircularOuOficio) {
             return true;
@@ -234,9 +233,9 @@ public class Burocrata {
                 doc -> {
                     if (doc instanceof Circular) {
                         if (documento instanceof Circular) {
-                            for (String dest : ((Circular) documento).getDestinatarios()) {
+                            for (String destinatario : ((Circular) documento).getDestinatarios()) {
                                 if (Arrays.stream(((Circular) doc).getDestinatarios()).noneMatch(
-                                        s -> s.equals(dest)
+                                        s -> s.equals(destinatario)
                                 )) {
                                     contemMesmoDestinatario.set(false);
                                 }
