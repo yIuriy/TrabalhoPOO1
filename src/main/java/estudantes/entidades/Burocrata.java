@@ -98,9 +98,9 @@ public class Burocrata {
                 GRADUACAO_ENGENHARIA_SOFTWARE, GRADUACAO_ENGENHARIA_TELECOMUNICACOES, POS_GRADUACAO_ENGENHARIA,
                 POS_GRADUACAO_ENGENHARIA_ELETRICA, POS_GRADUACAO_ENGENHARIA_SOFTWARE);
         ArrayList<Documento> todosDocumentos = new ArrayList<>();
-        codigosCursos.forEach(codigoCurso -> {
+        for (CodigoCurso codigoCurso : codigosCursos) {
             todosDocumentos.addAll(List.of(universidade.pegarCopiaDoMonteDoCurso(codigoCurso)));
-        });
+        }
         return todosDocumentos;
     }
 
