@@ -23,7 +23,7 @@ public class Deliberacao extends DocumentoAdministrativo {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Deliberacao that = (Deliberacao) o;
-        return Objects.deepEquals(texto, that.texto);
+        return Objects.equals(texto, that.texto);
     }
 
     @Override

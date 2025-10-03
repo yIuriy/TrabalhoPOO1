@@ -23,7 +23,7 @@ public class Circular extends Deliberacao{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Circular circular = (Circular) o;
-        return Objects.deepEquals(destinatarios, circular.destinatarios);
+        return Arrays.equals(destinatarios, circular.destinatarios);
     }
 
     @Override

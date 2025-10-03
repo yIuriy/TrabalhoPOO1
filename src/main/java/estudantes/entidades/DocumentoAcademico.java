@@ -21,8 +21,8 @@ public abstract class DocumentoAcademico extends Documento{
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        DocumentoAcademico that = (DocumentoAcademico) o;
-        return autenticacao == that.autenticacao;
+        DocumentoAcademico d = (DocumentoAcademico) o;
+        return autenticacao == d.autenticacao;
     }
 
     @Override

@@ -35,7 +35,7 @@ public class Ata extends Documento {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Ata ata = (Ata) o;
-        return numero == ata.numero && Objects.equals(texto, ata.texto) && Objects.deepEquals(presentes, ata.presentes);
+        return numero == ata.numero && texto.equals(ata.texto) && Arrays.equals(presentes, ata.presentes);
     }
 
     @Override
