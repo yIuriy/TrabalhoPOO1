@@ -77,27 +77,12 @@ public class Burocrata {
      * @see professor.entidades.Universidade#devolverDocumentoParaMonteDoCurso(estudantes.entidades.Documento, professor.entidades.CodigoCurso)
      */
     public void trabalhar() {
-        List<Documento> todosOsDocumentosDosCursos = getTodosDocumentosDosCursos();
-        Collections.shuffle(todosOsDocumentosDosCursos); // aleatoriza os documentos;
 //        System.out.println("Tamanho de lista de todos os Documentos:" + todosOsDocumentosDosCursos.size());
-
-        Processo processo1 = mesa.getProcesso(0);
-        Processo processo2 = mesa.getProcesso(1);
-        Processo processo3 = mesa.getProcesso(2);
-        Processo processo4 = mesa.getProcesso(3);
-        Processo processo5 = mesa.getProcesso(4);
-
-        gerenciarProcesso(processo1);
-        gerenciarProcesso(processo2);
-        gerenciarProcesso(processo3);
-        gerenciarProcesso(processo4);
-        gerenciarProcesso(processo5);
-
-        despacharProcesso(processo1, 1);
-        despacharProcesso(processo2, 2);
-        despacharProcesso(processo3, 3);
-        despacharProcesso(processo4, 4);
-        despacharProcesso(processo5, 5);
+        for (int i = 0; i < 5; i++) {
+            Processo processo = mesa.getProcesso(i);
+            gerenciarProcesso(processo);
+            despacharProcesso(processo, i + 1);
+        }
     }
 
     private void gerenciarProcesso(Processo processo) {
@@ -114,15 +99,15 @@ public class Burocrata {
                 GRADUACAO_ENGENHARIA_SOFTWARE, GRADUACAO_ENGENHARIA_TELECOMUNICACOES, POS_GRADUACAO_ENGENHARIA,
                 POS_GRADUACAO_ENGENHARIA_ELETRICA, POS_GRADUACAO_ENGENHARIA_SOFTWARE);
         List<Documento> todosDocumentos = new ArrayList<>();
-        codigosCursos.forEach(codigoCurso -> {
+        for (CodigoCurso codigoCurso : codigosCursos) {
             todosDocumentos.addAll(List.of(universidade.pegarCopiaDoMonteDoCurso(codigoCurso)));
-        });
+        }
         return todosDocumentos;
     }
 
     private void despacharProcesso(Processo processo, int numeroProcesso) {
         Documento[] documentos = processo.pegarCopiaDoProcesso();
-//        printTodosTiposDeDocumentosPresentesNaListaDeDocumentos(documentos);
+        printTodosTiposDeDocumentosPresentesNaListaDeDocumentos(documentos);
         if (!isListaDeDocumentosVazia(documentos)) {
             if (!isTodosDocumentosAtas(processo)) {
                 universidade.despachar(processo);
@@ -143,9 +128,7 @@ public class Burocrata {
     private void verificarSeAdicionaDocumentoNoProcesso(Processo processo, Documento documento) {
 
         Documento[] documentos = processo.pegarCopiaDoProcesso();
-
-        boolean isListaDeDocumentosVazia = isListaDeDocumentosVazia(documentos);
-        if (isListaDeDocumentosVazia && !(documento instanceof Ata)) {
+        if (isListaDeDocumentosVazia(documentos) && !(documento instanceof Ata)) {
             processo.adicionarDocumento(documento);
             universidade.removerDocumentoDoMonteDoCurso(documento, documento.getCodigoCurso());
         } else {
@@ -185,17 +168,33 @@ public class Burocrata {
         if (!(documento instanceof Ata)) {
             return true;
         }
-        return Arrays.stream(documentos).anyMatch(d -> (d instanceof DocumentoAdministrativo || d instanceof DocumentoAcademico));
+
+        for (Documento doc : documentos) {
+            if (doc instanceof DocumentoAdministrativo || doc instanceof DocumentoAcademico) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // Funcionando corretamente
     private boolean verificarSeAdicionaDocumentoPorNivelDeEducacao(Processo processo, Documento documento) {
         Documento[] documentos = processo.pegarCopiaDoProcesso();
         if (isDocumentoDePosGraduacao(documento)) { // é pós graduação
-            return Arrays.stream(documentos).allMatch(this::isDocumentoDePosGraduacao);
+            for (Documento doc : documentos) {
+                if (!isDocumentoDePosGraduacao(doc)) {
+                    return false;
+                }
+            }
         } else { // é de graduacao
-            return Arrays.stream(documentos).noneMatch(this::isDocumentoDePosGraduacao);
+            for (Documento doc : documentos) {
+                if (isDocumentoDePosGraduacao(doc)) {
+                    return false;
+                }
+            }
         }
+        return true;
     }
 
     // Funcionando corretamente
@@ -205,27 +204,41 @@ public class Burocrata {
             return true;
         }
         if (documento instanceof DocumentoAdministrativo) {
-            return Arrays.stream(documentos).allMatch(doc -> doc instanceof DocumentoAdministrativo);
+            for (Documento doc : documentos) {
+                if (!(doc instanceof DocumentoAdministrativo)) {
+                    return false;
+                }
+            }
         } else if (documento instanceof DocumentoAcademico) {
-            return Arrays.stream(documentos).allMatch(doc -> doc instanceof DocumentoAcademico);
+            for (Documento doc : documentos) {
+                if (!(doc instanceof DocumentoAcademico)) {
+                    return false;
+                }
+            }
         }
-        return false;
+        return true;
     }
 
     // Funcionando corretamente
     private boolean verificarSeAdicionaDocumentoPorQuantidadeDePaginas(Processo processo, Documento documento) {
         Documento[] documentos = processo.pegarCopiaDoProcesso();
-        int totalPaginas = Arrays.stream(documentos).mapToInt(Documento::getPaginas).sum();
+        int totalPaginas = 0;
+        for (Documento doc : documentos) {
+            totalPaginas += doc.getPaginas();
+        }
         return ((documento.getPaginas() + totalPaginas) <= 250);
     }
 
     // Funcionando corretamente
     private boolean verificarSeJaExisteDocumentoSubstancial(Processo processo) {
         Documento[] documentos = processo.pegarCopiaDoProcesso();
-        return Arrays.stream(documentos).anyMatch(doc ->
-                (doc instanceof Edital || doc instanceof Portaria) && doc.getPaginas() >= 100
-                        && ((Norma) doc).getValido()
-        );
+        for (Documento doc : documentos) {
+            if ((doc instanceof Edital || doc instanceof Portaria) && doc.getPaginas() >= 100
+                    && ((Norma) doc).getValido()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Funcionando corretamente
@@ -254,51 +267,76 @@ public class Burocrata {
             return true;
         }
         // Se chegou aqui, ele é Circular ou Oficio
-        var processoJaContemCircularOuOficio = Arrays.stream(documentos)
-                .anyMatch(doc -> doc instanceof Oficio || doc instanceof Circular);
-        if (!processoJaContemCircularOuOficio) {
-            return true;
+        for (Documento doc : documentos) {
+            if (!(doc instanceof Oficio || doc instanceof Circular)) {
+                return false;
+            }
         }
         // Se chegou aqui, significa que o processo já contém um circular ou um ofício
         // Abaixo, pegamos todos os documentos do tipo Circular ou Oficio presentes no processo
-        Object[] oficiosOuCircularesJaPresentesNoProcesso = Arrays.stream(documentos)
-                .filter(doc -> doc instanceof Circular || doc instanceof Oficio
-                ).toArray();
+        List<Documento> oficiosOuCircularesJaPresentesNoProcesso = new ArrayList<>();
 
-        AtomicBoolean contemMesmoDestinatario = new AtomicBoolean(true);
-        Arrays.stream(oficiosOuCircularesJaPresentesNoProcesso).forEach(
-                doc -> {
-                    if (doc instanceof Circular) {
-                        if (documento instanceof Circular) {
-                            for (String dest : ((Circular) documento).getDestinatarios()) {
-                                if (Arrays.stream(((Circular) doc).getDestinatarios()).noneMatch(
-                                        s -> s.equals(dest)
-                                )) {
-                                    contemMesmoDestinatario.set(false);
-                                }
-                            }
-                        } else {
-                            if (Arrays.stream(((Circular) doc).getDestinatarios()).noneMatch(
-                                    s -> s.equals(((Oficio) documento).getDestinatario())
-                            )) {
-                                contemMesmoDestinatario.set(false);
+        for (Documento doc : documentos) {
+            if (doc instanceof Circular || doc instanceof Oficio) {
+                oficiosOuCircularesJaPresentesNoProcesso.add(doc);
+            }
+        }
+
+        boolean contemMesmoDestinatario = true;
+
+        for (Documento doc : oficiosOuCircularesJaPresentesNoProcesso) {
+            if (doc instanceof Circular) { // Circular comparando com Circular
+                if (documento instanceof Circular) {
+                    boolean encontrou = false;
+                    for (String destinatario : ((Circular) documento).getDestinatarios()) {
+                        for (String destinatario2 : ((Circular) doc).getDestinatarios()) {
+                            if (destinatario.equals(destinatario2)) {
+                                encontrou = true;
+                                break;
                             }
                         }
-                    } else if (doc instanceof Oficio) {
-                        if (documento instanceof Circular) {
-                            if (Arrays.stream(((Circular) documento).getDestinatarios()).noneMatch(
-                                    s -> s.equals(((Oficio) doc).getDestinatario())
-                            )) {
-                                contemMesmoDestinatario.set(false);
-                            }
-                        } else {
-                            if (!((Oficio) documento).getDestinatario().equals(((Oficio) doc).getDestinatario())) {
-                                contemMesmoDestinatario.set(false);
-                            }
+                        if (encontrou) break;
+                    }
+                    if (!encontrou) {
+                        contemMesmoDestinatario = false;
+                        break;
+                    }
+                } else { // Circular comparando com Oficio
+                    boolean encontrou = false;
+                    for (String destinatario : ((Circular) doc).getDestinatarios()) {
+                        if (destinatario.equals(((Oficio) documento).getDestinatario())) {
+                            encontrou = true;
+                            break;
                         }
                     }
-                });
-        return contemMesmoDestinatario.get();
+                    if (!encontrou) {
+                        contemMesmoDestinatario = false;
+                        break;
+                    }
+                }
+            } else if (doc instanceof Oficio) {
+                if (documento instanceof Circular) { // Comparando Ofício com Circular
+                    boolean encontrou = false;
+                    for (String destinatario : ((Circular) documento).getDestinatarios()) {
+                        if (destinatario.equals(((Oficio) doc).getDestinatario())) {
+                            encontrou = true;
+                            break;
+                        }
+                    }
+                    if (!encontrou) {
+                        contemMesmoDestinatario = false;
+                        break;
+                    }
+                } else { // Comparando Ofício com Ofício
+                    if (!((Oficio) documento).getDestinatario().equals(((Oficio) doc).getDestinatario())) {
+                        contemMesmoDestinatario = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return contemMesmoDestinatario;
     }
 
     private boolean verificarSeAdicionaDocumentoCasoDiploma(Processo processo, Documento documento) {
@@ -309,15 +347,21 @@ public class Burocrata {
                 return true;
             }
             // Se conter um diploma, automaticamente é inválido adicionar
-            return Arrays.stream(documentos).noneMatch(
-                    doc -> doc instanceof Diploma);
+            for (Documento doc : documentos) {
+                if (doc instanceof Diploma) {
+                    return false;
+                }
+            }
         } else {
             // Ao chegar aqui automaticamente é Diploma
             // Se conter apenas Diploma, Certificado ou Ata, pode ser adicionado
-            return Arrays.stream(documentos).allMatch(
-                    doc -> doc instanceof Certificado || doc instanceof Ata
-            );
+            for (Documento doc : documentos) {
+                if (!(doc instanceof Certificado || doc instanceof Ata)) {
+                    return false;
+                }
+            }
         }
+        return true;
     }
 
     private boolean verificarSeAdicionaDocumentoCasoAtestado(Processo processo, Documento documento) {
@@ -326,20 +370,28 @@ public class Burocrata {
             return true;
         }
         // Ao chegar aqui, automaticamente é Atestado
-        boolean processoNaoContemNenhumAtestado = Arrays.stream(documentos).noneMatch(
-                doc -> doc instanceof Atestado
-        );
-        // Se o processo não contém nenhum Atestado, não há como ter conflito de categoria
-        if (processoNaoContemNenhumAtestado) {
+        boolean contemAtestado = false;
+        for (Documento doc : documentos) {
+            // Se o processo não contém nenhum Atestado, não há como ter conflito de categoria
+            if (doc instanceof Atestado) {
+                contemAtestado = true;
+                break;
+            }
+        }
+        if (!contemAtestado){
             return true;
         }
+
         // Chegando aqui, automaticamente o processo contém um ou mais Atestado
-        List<String> categoriasDosAtestadosNoProcesso = Arrays.stream(documentos).filter(
-                doc -> doc instanceof Atestado
-        ).map(doc -> ((Atestado) doc).getCategoria()).toList();
+        List<String> categoriasDosAtestadosNoProcesso = new ArrayList<>();
+
+        for (Documento doc : documentos) {
+            if (doc instanceof Atestado) {
+                categoriasDosAtestadosNoProcesso.add(((Atestado) doc).getCategoria());
+            }
+        }
 
         String categoriaDoAtestado = ((Atestado) documento).getCategoria();
-
         // Se a categoria do atestado no processo for diferente do diploma a ser adicionado, automaticamente não
         // adiciona
         // A categoria do atestado no processo é definido pelo primeiro atestado adicionado no processo
@@ -348,10 +400,12 @@ public class Burocrata {
 
     private boolean isTodosDocumentosAtas(Processo processo) {
         Documento[] documentos = processo.pegarCopiaDoProcesso();
-        if (documentos.length == 0) return false;
-        return Arrays.stream(documentos).noneMatch(
-                doc -> (doc instanceof DocumentoAdministrativo || doc instanceof DocumentoAcademico)
-        );
+        for (Documento doc : documentos) {
+            if (doc instanceof DocumentoAdministrativo || doc instanceof DocumentoAcademico) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean isDocumentoDePosGraduacao(Documento doc) {
