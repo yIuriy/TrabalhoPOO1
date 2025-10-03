@@ -77,27 +77,11 @@ public class Burocrata {
      * @see professor.entidades.Universidade#devolverDocumentoParaMonteDoCurso(estudantes.entidades.Documento, professor.entidades.CodigoCurso)
      */
     public void trabalhar() {
-        List<Documento> todosOsDocumentosDosCursos = getTodosDocumentosDosCursos();
-        Collections.shuffle(todosOsDocumentosDosCursos); // aleatoriza os documentos;
-//        System.out.println("Tamanho de lista de todos os Documentos:" + todosOsDocumentosDosCursos.size());
-
-        Processo processo1 = mesa.getProcesso(0);
-        Processo processo2 = mesa.getProcesso(1);
-        Processo processo3 = mesa.getProcesso(2);
-        Processo processo4 = mesa.getProcesso(3);
-        Processo processo5 = mesa.getProcesso(4);
-
-        gerenciarProcesso(processo1);
-        gerenciarProcesso(processo2);
-        gerenciarProcesso(processo3);
-        gerenciarProcesso(processo4);
-        gerenciarProcesso(processo5);
-
-        despacharProcesso(processo1, 1);
-        despacharProcesso(processo2, 2);
-        despacharProcesso(processo3, 3);
-        despacharProcesso(processo4, 4);
-        despacharProcesso(processo5, 5);
+        for (int i = 0; i < 5; i++) {
+            Processo processo = mesa.getProcesso(i);
+            gerenciarProcesso(processo);
+            despacharProcesso(processo, i + 1);
+        }
     }
 
     private void gerenciarProcesso(Processo processo) {
@@ -145,6 +129,7 @@ public class Burocrata {
         Documento[] documentos = processo.pegarCopiaDoProcesso();
 
         boolean isListaDeDocumentosVazia = isListaDeDocumentosVazia(documentos);
+        if(verificarSeJaExisteDocumentoSubstancial(processo)) return;
         if (isListaDeDocumentosVazia && !(documento instanceof Ata)) {
             processo.adicionarDocumento(documento);
             universidade.removerDocumentoDoMonteDoCurso(documento, documento.getCodigoCurso());
@@ -168,7 +153,6 @@ public class Burocrata {
                     && deveAdicionarPorDiploma
                     && deveAdicionarPorCategoriaAtestado
                     && deveAdicionarAtaComBaseNoElementoAnterior
-                    && !verificarSeJaExisteDocumentoSubstancial(processo)
             ) {
                 processo.adicionarDocumento(documento);
                 universidade.removerDocumentoDoMonteDoCurso(documento, documento.getCodigoCurso());
