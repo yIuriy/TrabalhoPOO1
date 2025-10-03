@@ -2,6 +2,7 @@ package estudantes.entidades;
 
 import professor.entidades.*;
 
+import javax.print.Doc;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -24,8 +25,6 @@ public class Burocrata {
     private int estresse = 0;
     private Mesa mesa;
     private Universidade universidade;
-    private int naoDespachadoCount = 0;
-    private int listaVaziaCount = 0;
 
     /**
      * Construtor de Burocrata.
@@ -114,32 +113,27 @@ public class Burocrata {
                 GRADUACAO_ENGENHARIA_CIVIL, GRADUACAO_ENGENHARIA_ELETRICA, GRADUACAO_ENGENHARIA_MECANICA,
                 GRADUACAO_ENGENHARIA_SOFTWARE, GRADUACAO_ENGENHARIA_TELECOMUNICACOES, POS_GRADUACAO_ENGENHARIA,
                 POS_GRADUACAO_ENGENHARIA_ELETRICA, POS_GRADUACAO_ENGENHARIA_SOFTWARE);
-        List<Documento> allDocumentos = new ArrayList<>();
+        List<Documento> todosDocumentos = new ArrayList<>();
         codigosCursos.forEach(codigoCurso -> {
-            allDocumentos.addAll(List.of(universidade.pegarCopiaDoMonteDoCurso(codigoCurso)));
+            todosDocumentos.addAll(List.of(universidade.pegarCopiaDoMonteDoCurso(codigoCurso)));
         });
-        return allDocumentos;
+        return todosDocumentos;
     }
 
     private void despacharProcesso(Processo processo, int numeroProcesso) {
         Documento[] documentos = processo.pegarCopiaDoProcesso();
 //        printTodosTiposDeDocumentosPresentesNaListaDeDocumentos(documentos);
         if (!isListaDeDocumentosVazia(documentos)) {
-            if (!isTodosDocumentosAtas(documentos)) {
+            if (!isTodosDocumentosAtas(processo)) {
                 universidade.despachar(processo);
 //                System.out.println("Processo " + numeroProcesso + " despachado.");
             } else {
                 // Remove o último elemento, garantindo que não vai ficar travado só com Ata
-                processo.removerDocumento(documentos[documentos.length - 1]);
-                naoDespachadoCount++;
-//                System.out.println("Processo " + numeroProcesso + " não despachado.");
+                Documento documento = documentos[documentos.length - 1];
+                processo.removerDocumento(documento);
+                universidade.devolverDocumentoParaMonteDoCurso(documento, documento.getCodigoCurso());
             }
-        } else {
-            listaVaziaCount++;
         }
-//        System.out.println("Vezes lista vazia: " + listaVaziaCount);
-//        System.out.println("Vezes não despachado: " + naoDespachadoCount);
-
     }
     //        printResultadoDasVerificacoesParaAdicionarDocumentos(isListaDeDocumentosVazia,
 //                deveAdicionarPorNivelDeEducacao, deveAdicionarPorTipo, deveAdicionarPorQuantidadeDePaginas,
@@ -155,15 +149,16 @@ public class Burocrata {
             processo.adicionarDocumento(documento);
             universidade.removerDocumentoDoMonteDoCurso(documento, documento.getCodigoCurso());
         } else {
-            boolean deveAdicionarPorNivelDeEducacao = verificarSeAdicionaDocumentoPorNivelDeEducacao(documentos, documento);
-            boolean deveAdicionarPorTipo = verificarSeAdicionarDocumentoPorTipo(documentos, documento);
-            boolean deveAdicionarPorQuantidadeDePaginas = verificarSeAdicionaDocumentoPorQuantidadeDePaginas(documentos, documento);
-            boolean deveAdicionarPorDocumentoSubstancial = verificarSeAdicionaDocumentoSubstancial(documentos, documento);
+            boolean deveAdicionarPorNivelDeEducacao = verificarSeAdicionaDocumentoPorNivelDeEducacao(processo, documento);
+            boolean deveAdicionarPorTipo = verificarSeAdicionarDocumentoPorTipo(processo, documento);
+            boolean deveAdicionarPorQuantidadeDePaginas = verificarSeAdicionaDocumentoPorQuantidadeDePaginas(processo,
+                    documento);
+            boolean deveAdicionarPorDocumentoSubstancial = verificarSeAdicionaDocumentoSubstancial(processo, documento);
             boolean deveAdicionarPorDestinatarioDeOficioECircular =
-                    verificarSeAdicionaDocumentoCasoCircularesEOficio(documentos, documento);
-            boolean deveAdicionarPorDiploma = verificarSeAdicionaDocumentoCasoDiploma(documentos, documento);
-            boolean deveAdicionarPorCategoriaAtestado = verificarSeAdicionaDocumentoCasoAtestado(documentos, documento);
-            boolean isValidAtaHandler = verificarSeAdicionaAtaVerificandoPorElementoAnterior(documentos, documento);
+                    verificarSeAdicionaDocumentoCasoCircularesEOficio(processo, documento);
+            boolean deveAdicionarPorDiploma = verificarSeAdicionaDocumentoCasoDiploma(processo, documento);
+            boolean deveAdicionarPorCategoriaAtestado = verificarSeAdicionaDocumentoCasoAtestado(processo, documento);
+            boolean deveAdicionarAtaComBaseNoElementoAnterior = verificarSeAdicionaAtaVerificandoPorElementoAnterior(processo, documento);
 
             if (deveAdicionarPorNivelDeEducacao
                     && deveAdicionarPorTipo
@@ -172,13 +167,12 @@ public class Burocrata {
                     && deveAdicionarPorDestinatarioDeOficioECircular
                     && deveAdicionarPorDiploma
                     && deveAdicionarPorCategoriaAtestado
-                    && isValidAtaHandler
-                    && !verificarSeJaExisteDocumentoSubstancial(documentos)
+                    && deveAdicionarAtaComBaseNoElementoAnterior
+                    && !verificarSeJaExisteDocumentoSubstancial(processo)
             ) {
                 processo.adicionarDocumento(documento);
                 universidade.removerDocumentoDoMonteDoCurso(documento, documento.getCodigoCurso());
             }
-
         }
     }
 
@@ -186,18 +180,17 @@ public class Burocrata {
         return documentos.length == 0;
     }
 
-    private boolean verificarSeAdicionaAtaVerificandoPorElementoAnterior(Documento[] documentos, Documento documento) {
+    private boolean verificarSeAdicionaAtaVerificandoPorElementoAnterior(Processo processo, Documento documento) {
+        Documento[] documentos = processo.pegarCopiaDoProcesso();
         if (!(documento instanceof Ata)) {
             return true;
         }
-        if (isListaDeDocumentosVazia(documentos)) {
-            return true;
-        }
-        return !(documentos[documentos.length - 1] instanceof Ata);
+        return Arrays.stream(documentos).anyMatch(d -> (d instanceof DocumentoAdministrativo || d instanceof DocumentoAcademico));
     }
 
     // Funcionando corretamente
-    private boolean verificarSeAdicionaDocumentoPorNivelDeEducacao(Documento[] documentos, Documento documento) {
+    private boolean verificarSeAdicionaDocumentoPorNivelDeEducacao(Processo processo, Documento documento) {
+        Documento[] documentos = processo.pegarCopiaDoProcesso();
         if (isDocumentoDePosGraduacao(documento)) { // é pós graduação
             return Arrays.stream(documentos).allMatch(this::isDocumentoDePosGraduacao);
         } else { // é de graduacao
@@ -206,7 +199,8 @@ public class Burocrata {
     }
 
     // Funcionando corretamente
-    private boolean verificarSeAdicionarDocumentoPorTipo(Documento[] documentos, Documento documento) {
+    private boolean verificarSeAdicionarDocumentoPorTipo(Processo processo, Documento documento) {
+        Documento[] documentos = processo.pegarCopiaDoProcesso();
         if (documento instanceof Ata) {
             return true;
         }
@@ -219,13 +213,15 @@ public class Burocrata {
     }
 
     // Funcionando corretamente
-    private boolean verificarSeAdicionaDocumentoPorQuantidadeDePaginas(Documento[] documentos, Documento documento) {
+    private boolean verificarSeAdicionaDocumentoPorQuantidadeDePaginas(Processo processo, Documento documento) {
+        Documento[] documentos = processo.pegarCopiaDoProcesso();
         int totalPaginas = Arrays.stream(documentos).mapToInt(Documento::getPaginas).sum();
         return ((documento.getPaginas() + totalPaginas) <= 250);
     }
 
     // Funcionando corretamente
-    private boolean verificarSeJaExisteDocumentoSubstancial(Documento[] documentos) {
+    private boolean verificarSeJaExisteDocumentoSubstancial(Processo processo) {
+        Documento[] documentos = processo.pegarCopiaDoProcesso();
         return Arrays.stream(documentos).anyMatch(doc ->
                 (doc instanceof Edital || doc instanceof Portaria) && doc.getPaginas() >= 100
                         && ((Norma) doc).getValido()
@@ -233,7 +229,8 @@ public class Burocrata {
     }
 
     // Funcionando corretamente
-    private boolean verificarSeAdicionaDocumentoSubstancial(Documento[] documentos, Documento documento) {
+    private boolean verificarSeAdicionaDocumentoSubstancial(Processo processo, Documento documento) {
+        Documento[] documentos = processo.pegarCopiaDoProcesso();
         if (!(documento instanceof Portaria || documento instanceof Edital)) {
             return true;
         }
@@ -251,7 +248,8 @@ public class Burocrata {
     }
 
 
-    private boolean verificarSeAdicionaDocumentoCasoCircularesEOficio(Documento[] documentos, Documento documento) {
+    private boolean verificarSeAdicionaDocumentoCasoCircularesEOficio(Processo processo, Documento documento) {
+        Documento[] documentos = processo.pegarCopiaDoProcesso();
         if (!(documento instanceof Circular || documento instanceof Oficio)) {
             return true;
         }
@@ -303,7 +301,8 @@ public class Burocrata {
         return contemMesmoDestinatario.get();
     }
 
-    private boolean verificarSeAdicionaDocumentoCasoDiploma(Documento[] documentos, Documento documento) {
+    private boolean verificarSeAdicionaDocumentoCasoDiploma(Processo processo, Documento documento) {
+        Documento[] documentos = processo.pegarCopiaDoProcesso();
         if (!(documento instanceof Diploma)) {
             // Ata e Certificados podem ficar com Diploma
             if (documento instanceof Ata || documento instanceof Certificado) {
@@ -321,7 +320,8 @@ public class Burocrata {
         }
     }
 
-    private boolean verificarSeAdicionaDocumentoCasoAtestado(Documento[] documentos, Documento documento) {
+    private boolean verificarSeAdicionaDocumentoCasoAtestado(Processo processo, Documento documento) {
+        Documento[] documentos = processo.pegarCopiaDoProcesso();
         if (!(documento instanceof Atestado)) {
             return true;
         }
@@ -346,7 +346,8 @@ public class Burocrata {
         return categoriasDosAtestadosNoProcesso.contains(categoriaDoAtestado);
     }
 
-    private boolean isTodosDocumentosAtas(Documento[] documentos) {
+    private boolean isTodosDocumentosAtas(Processo processo) {
+        Documento[] documentos = processo.pegarCopiaDoProcesso();
         if (documentos.length == 0) return false;
         return Arrays.stream(documentos).noneMatch(
                 doc -> (doc instanceof DocumentoAdministrativo || doc instanceof DocumentoAcademico)
