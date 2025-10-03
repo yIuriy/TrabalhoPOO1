@@ -21,8 +21,8 @@ public class Certificado extends Registro{
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        Certificado that = (Certificado) o;
-        return Objects.equals(descricao, that.descricao);
+        Certificado c = (Certificado) o;
+        return Objects.equals(descricao, c.descricao);
     }
 
     @Override

@@ -5,7 +5,7 @@ import professor.entidades.CodigoCurso;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Plano extends DocumentoAcademico{
+public class Plano extends DocumentoAcademico {
     private String responsavel;
     private String[] planejamento;
 
@@ -29,7 +29,7 @@ public class Plano extends DocumentoAcademico{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Plano plano = (Plano) o;
-        return Objects.equals(responsavel, plano.responsavel) && Objects.deepEquals(planejamento, plano.planejamento);
+        return Objects.equals(responsavel, plano.responsavel) && Arrays.equals(planejamento, plano.planejamento);
     }
 
     @Override

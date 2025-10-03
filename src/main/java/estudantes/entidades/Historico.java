@@ -29,7 +29,7 @@ public class Historico extends Registro {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Historico historico = (Historico) o;
-        return Double.compare(coeficiente, historico.coeficiente) == 0 && Objects.deepEquals(componentes, historico.componentes);
+        return Double.compare(coeficiente, historico.coeficiente) == 0 && Arrays.equals(componentes, historico.componentes);
     }
 
     @Override
