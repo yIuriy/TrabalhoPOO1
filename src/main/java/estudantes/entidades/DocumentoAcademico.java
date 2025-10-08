@@ -51,7 +51,7 @@ public abstract class DocumentoAcademico extends Documento{
 
 
     /**
-     * Compara esta {@code DocumentoAcademico} com o objeto especificado para verificar igualdade.
+     * Compara este {@code DocumentoAcademico} com o objeto especificado para verificar igualdade.
      *
      * <p>A comparação considera:
      * <ul>
@@ -60,7 +60,7 @@ public abstract class DocumentoAcademico extends Documento{
      * </ul>
      * @param o o objeto a ser comparado
      * @return {@code true} se ambos os Objetos forem instâncias de {@code DocumentoAcademico} e possuírem os mesmo valores
-     * nos atributos herdados e no campos {@code autenticacao}; {@code false} caso contrário
+     * nos atributos herdados e no campo {@code autenticacao}; {@code false} caso contrário
      *
      * @see #hashCode()
      * @see Documento#equals(Object)
