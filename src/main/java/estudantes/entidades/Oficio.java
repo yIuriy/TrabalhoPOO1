@@ -29,7 +29,6 @@ public class Oficio extends Deliberacao {
      * @see DocumentoAdministrativo
      * @see Deliberacao
      * @since 1.0
-     *
      */
     public Oficio(String criador, CodigoCurso codigoCurso, int paginas,
                   String texto, String destinatario) {

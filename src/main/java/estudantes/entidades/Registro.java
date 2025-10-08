@@ -30,7 +30,6 @@ public class Registro extends DocumentoAcademico {
      * @see Documento
      * @see DocumentoAcademico
      * @since 1.0
-     *
      */
     public Registro(String criador, CodigoCurso codigoCurso, int paginas, long autenticacao,
                     String estudante, long matricula) {
@@ -44,7 +43,6 @@ public class Registro extends DocumentoAcademico {
      *
      * @return o estudante associado ao {@code Registro}
      * @since 1.0
-     *
      */
     public String getEstudante() {
         return estudante;
@@ -55,7 +53,6 @@ public class Registro extends DocumentoAcademico {
      *
      * @return a matrícula do estudante associado ao {@code Registro}
      * @since 1.0
-     *
      */
     public long getMatricula() {
         return matricula;

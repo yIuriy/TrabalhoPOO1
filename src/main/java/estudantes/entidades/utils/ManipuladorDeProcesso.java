@@ -19,10 +19,8 @@ import static estudantes.entidades.utils.ValidadorProcesso.isTodosDocumentosAtas
  *
  * @author Iuri da Silva Fernandes
  * @version 1.0
- *
- * */
+ */
 public record ManipuladorDeProcesso(Universidade universidade) {
-
 
     /**
      * Gerencia o processo, percorrendo a lista de todos os {@code Documentos} dos {@code Cursos} e verificando se
@@ -32,13 +30,12 @@ public record ManipuladorDeProcesso(Universidade universidade) {
      * percorre a lista com {@code for()}, utilizando {@code verificarSeAdicionaDocumentoNoProcesso()} para cada
      * {@code Documento}.
      * </p>
-     * @param processo o processo a ser gerenciado
      *
-     * @since 1.0
+     * @param processo o processo a ser gerenciado
      * @see Processo
      * @see ColetorDocumentos#getTodosDocumentosDosCursos(Universidade)
      * @see ManipuladorDeProcesso#verificarSeAdicionaDocumentoNoProcesso(Processo, Documento)
-     *
+     * @since 1.0
      */
     public void gerenciarProcesso(Processo processo) {
         ArrayList<Documento> finalTodosDocumentos = getTodosDocumentosDosCursos(universidade);
@@ -54,15 +51,13 @@ public record ManipuladorDeProcesso(Universidade universidade) {
      * <p>O {@code Processo} só será despachado caso a lista de {@code Documentos} dele não seja vazia e nem seja
      * formada somente por {@code Atas}.</p>
      *
-     * @param processo o processo a ser despachado
+     * @param processo       o processo a ser despachado
      * @param numeroProcesso o número do processo para exibição
-     *
-     * @since 1.0
      * @see Universidade#despachar(Processo)
      * @see Universidade#removerDocumentoDoMonteDoCurso(Documento, CodigoCurso)
      * @see Processo
      * @see ValidadorProcesso
-     *
+     * @since 1.0
      */
     public void despacharProcesso(Processo processo, int numeroProcesso) {
         Documento[] documentos = processo.pegarCopiaDoProcesso();
@@ -94,16 +89,14 @@ public record ManipuladorDeProcesso(Universidade universidade) {
      * <p>Caso o {@code Documento} falhe em alguma das verificações, ele não será adicionado.</p>
      * <p>Caso o {@code Documento} passe em todas as verificações, ele será adicionado à lista do {@code Processo} e removido do monte do {@code Curso}.</p>
      *
-     * @param processo o processo a ser despachado
+     * @param processo  o processo a ser despachado
      * @param documento o documento a ser avaliado
-     *
-     * @since 1.0
      * @see Universidade
      * @see Processo
      * @see professor.entidades.Curso
      * @see ValidadorDocumentos
      * @see ValidadorProcesso
-     *
+     * @since 1.0
      */
     private void verificarSeAdicionaDocumentoNoProcesso(Processo processo, Documento documento) {
         Documento[] documentos = processo.pegarCopiaDoProcesso();

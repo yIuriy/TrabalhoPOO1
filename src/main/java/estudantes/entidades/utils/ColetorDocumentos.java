@@ -16,7 +16,6 @@ import static professor.entidades.CodigoCurso.*;
  * @version 1.0
  * @see Universidade
  * @see CodigoCurso
- *
  */
 public abstract class ColetorDocumentos {
     private static final List<CodigoCurso> CODIGOS_CURSOS = List.of(GRADUACAO_CIENCIA_DA_COMPUTACAO,
@@ -37,8 +36,6 @@ public abstract class ColetorDocumentos {
      * @see Universidade
      * @see professor.entidades.Curso
      * @see Documento
-     * @since 1.0
-     *
      */
     protected static ArrayList<Documento> getTodosDocumentosDosCursos(Universidade universidade) {
         ArrayList<Documento> todosDocumentos = new ArrayList<>();

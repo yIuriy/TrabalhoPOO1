@@ -32,7 +32,6 @@ public class Certificado extends Registro {
      * @see DocumentoAcademico
      * @see Registro
      * @since 1.0
-     *
      */
     public Certificado(String criador, CodigoCurso codigoCurso, int paginas, long autenticacao, String estudante,
                        long matricula, String descricao) {
@@ -45,12 +44,10 @@ public class Certificado extends Registro {
      *
      * @return a descrição do {@code Certificado}
      * @since 1.0
-     *
      */
     public String getDescricao() {
         return descricao;
     }
-
 
     /**
      * Compara este {@code Certificado} com o objeto especificado para verificar igualdade.

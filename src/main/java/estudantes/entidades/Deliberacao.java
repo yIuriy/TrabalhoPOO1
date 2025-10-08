@@ -12,7 +12,7 @@ import java.util.Objects;
  * @see DocumentoAdministrativo
  */
 public class Deliberacao extends DocumentoAdministrativo {
-    private String texto; // Era String, mas tava dando erro
+    private String texto;
 
     /**
      * Cria uma instância de {@code Registro}.
@@ -44,7 +44,6 @@ public class Deliberacao extends DocumentoAdministrativo {
     public String getTexto() {
         return texto;
     }
-
 
     /**
      * Compara esta {@code Deliberacao} com o objeto especificado para verificar igualdade.

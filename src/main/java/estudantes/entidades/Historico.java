@@ -5,7 +5,6 @@ import professor.entidades.CodigoCurso;
 import java.util.Arrays;
 import java.util.Objects;
 
-
 /**
  * Representa um {@code Historico}, que é uma especialização de {@code Registro}.
  *
@@ -16,7 +15,6 @@ import java.util.Objects;
 public class Historico extends Registro {
     private double coeficiente;
     private String[] componentes;
-
 
     /**
      * Cria uma instância de {@code Registro}.
@@ -36,7 +34,6 @@ public class Historico extends Registro {
      * @see DocumentoAcademico
      * @see Registro
      * @since 1.0
-     *
      */
     public Historico(String criador, CodigoCurso codigoCurso, int paginas, long autenticacao, String estudante, long matricula,
                      double coeficiente, String[] componentes) {
@@ -50,7 +47,6 @@ public class Historico extends Registro {
      *
      * @return o coeficiente do {@code Historico}
      * @since 1.0
-     *
      */
     public double getCoeficiente() {
         return coeficiente;
@@ -61,7 +57,6 @@ public class Historico extends Registro {
      *
      * @return {@code String[]} com os componentes do {@code Historico}
      * @since 1.0
-     *
      */
     public String[] getComponentes() {
         return componentes;

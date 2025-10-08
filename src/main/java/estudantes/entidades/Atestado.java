@@ -2,7 +2,6 @@ package estudantes.entidades;
 
 import professor.entidades.CodigoCurso;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 
@@ -35,7 +34,6 @@ public class Atestado extends Registro {
      * @see DocumentoAcademico
      * @see Registro
      * @since 1.0
-     *
      */
     public Atestado(String criador, CodigoCurso codigoCurso, int paginas, long autenticacao, String estudante,
                     long matricula, String descricao, String categoria) {
@@ -49,7 +47,6 @@ public class Atestado extends Registro {
      *
      * @return a descricao do {@code Atestado}
      * @since 1.0
-     *
      */
     public String getDescricao() {
         return descricao;
@@ -60,7 +57,6 @@ public class Atestado extends Registro {
      *
      * @return a categoria do {@code Atestado}
      * @since 1.0
-     *
      */
     public String getCategoria() {
         return categoria;

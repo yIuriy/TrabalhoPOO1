@@ -18,7 +18,6 @@ public abstract class Impressores {
      * @param numeroProcesso número do processo, utilizado para formatação e não acesso via ìndex
      * @param documentos     lista de documentos do processo
      * @since 1.0
-     *
      */
     public static void printTamanhoDaListaDeDocumentosDoProcesso(int numeroProcesso, Documento[] documentos) {
         System.out.printf("Tamanho do processo %s: %d\n", numeroProcesso, documentos.length);
@@ -32,7 +31,6 @@ public abstract class Impressores {
      * @param numeroProcesso número do processo, utilizado para formatação e não acesso via ìndex
      * @param documentos     lista de documentos do processo
      * @since 1.0
-     *
      */
     public static void printTotalDePaginasDosDocumentosDoProcesso(int numeroProcesso, Documento[] documentos) {
         System.out.printf("Páginas do processo %s: %d\n", numeroProcesso, Arrays.stream(documentos).mapToInt(Documento::getPaginas).sum());
@@ -46,7 +44,6 @@ public abstract class Impressores {
      *
      * @param documentos lista de documentos do processo
      * @since 1.0
-     *
      */
     public static void printTodosTiposDeDocumentosPresentesNaListaDeDocumentos(Documento[] documentos) {
         System.out.println("=================================");
@@ -60,8 +57,7 @@ public abstract class Impressores {
      *
      * @param isListaDeDocumentosVazia                      se a lista está vazia
      * @param deveAdicionarPorNivelDeEducacao               se adiciona baseado no nível de educação do documento
-     *                                                      (pós-graduação ou
-     *                                                      graduação)
+     *                                                      (pós-graduação ou graduação)
      * @param deveAdicionarPorTipo                          se adiciona baseado no tipo de documento (Administrativo, Academico, Ata)
      * @param deveAdicionarPorQuantidadeDePaginas           se adiciona baseado na quantidade total de páginas
      * @param deveAdicionarPorDocumentoSubstancial          se adiciona baseado se é documento substancial
@@ -69,7 +65,6 @@ public abstract class Impressores {
      * @param deveAdicionarPorDestinatarioDeOficioECircular se adiciona baseado nas regras do Oficio e Circular
      * @param deveAdicionarPorCategoriaAtestado             se adiciona baseado nas regras de Categoria do Atestado
      * @since 1.0
-     *
      */
     public static void printResultadoDasVerificacoesParaAdicionarDocumentos(
             boolean isListaDeDocumentosVazia,

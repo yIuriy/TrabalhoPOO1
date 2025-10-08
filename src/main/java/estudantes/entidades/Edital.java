@@ -32,7 +32,6 @@ public class Edital extends Norma {
      * @see DocumentoAdministrativo
      * @see Norma
      * @since 1.0
-     *
      */
     public Edital(String criador, CodigoCurso codigoCurso, int paginas, int numero,
                   boolean valido, String texto, String[] responsaveis) {
@@ -41,9 +40,9 @@ public class Edital extends Norma {
     }
 
     /**
-     * Retorna os responsaveis pelo {@code Edital}.
+     * Retorna os responsáveis pelo {@code Edital}.
      *
-     * @return {@code String[]} com os responsaveis pelo {@code Circular}
+     * @return {@code String[]} com os responsáveis pelo {@code Edital}
      * @since 1.0
      */
     public String[] getResponsaveis() {
@@ -89,7 +88,7 @@ public class Edital extends Norma {
      * @return o código hash do objeto
      * @see #equals(Object)
      * @see Objects#hash(Object...)
-     * @see Deliberacao#hashCode()
+     * @see Norma#hashCode()
      * @since 1.0
      */
     @Override

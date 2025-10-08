@@ -5,7 +5,6 @@ import professor.entidades.CodigoCurso;
 import java.util.Arrays;
 import java.util.Objects;
 
-
 /**
  * Representa uma {@code Ata}, que é uma especialização de {@code Documento}.
  *
@@ -25,18 +24,16 @@ public final class Ata extends Documento {
      * <p>Utiliza o construtor da superclasse {@link Documento} através de {@code super()} para inicializar os atributos
      * herdados.</p>
      *
-     * @param criador o criador da {@code Ata}
+     * @param criador     o criador da {@code Ata}
      * @param codigoCurso o {@code Curso} ao qual este {@code Ata} está associado
-     * @param paginas a quantidade de páginas do {@code Ata}
-     * @param numero o número da {@code Ata}
-     * @param texto o texto da {@code Ata}
-     * @param presentes os presentes na {@code Ata}
-     *
-     * @since 1.0
+     * @param paginas     a quantidade de páginas do {@code Ata}
+     * @param numero      o número da {@code Ata}
+     * @param texto       o texto da {@code Ata}
+     * @param presentes   os presentes na {@code Ata}
      * @see CodigoCurso
      * @see Documento
-     *
-     * */
+     * @since 1.0
+     */
     public Ata(String criador, CodigoCurso codigoCurso, int paginas,
                int numero, String texto, String[] presentes) {
         super(criador, codigoCurso, paginas);
@@ -50,16 +47,17 @@ public final class Ata extends Documento {
      *
      * @return o número da {@code Ata}
      * @since 1.0
-     * */
+     */
     public int getNumero() {
         return numero;
     }
+
     /**
      * Retorna o texto da {@code Ata}.
      *
      * @return o texto da {@code Ata}
      * @since 1.0
-     * */
+     */
     public String getTexto() {
         return texto;
     }
@@ -69,7 +67,7 @@ public final class Ata extends Documento {
      *
      * @return um {@code String[]} com os presentes da {@code Ata}
      * @since 1.0
-     * */
+     */
     public String[] getPresentes() {
         return presentes;
     }
@@ -82,10 +80,10 @@ public final class Ata extends Documento {
      *   <li>Os campos herdados de {@code Documento}, por meio de {@code super.equals(o)};</li>
      *   <li>Os campos {@code numero}, {@code texto} e {@code presentes} desta classe.</li>
      * </ul>
+     *
      * @param o o objeto a ser comparado
      * @return {@code true} se ambos os Objetos forem instâncias de {@code Ata} e possuírem os mesmo valores
      * nos atributos herdados e nos campos {@code numero}, {@code texto} e {@code presentes}; {@code false} caso contrário
-     *
      * @see #hashCode()
      * @see Documento#equals(Object)
      * @since 1.0
@@ -108,7 +106,6 @@ public final class Ata extends Documento {
      * {@code numero}, {@code texto} e {@code presentes}.</p>
      *
      * @return o código hash do objeto
-     *
      * @see #equals(Object)
      * @see Objects#hash(Object...)
      * @see Documento#hashCode()

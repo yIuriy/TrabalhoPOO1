@@ -7,16 +7,9 @@ import professor.entidades.Universidade;
 
 /**
  * Classe que traz a lógica do algoritmo de organização e despacho de processos.
- * <br><br>
- * Você pode incluir novos atributos e métodos nessa classe para criar
- * lógicas mais complexas para o gerenciamento da organização e despacho de
- * processos, mas esses <strong>atributos e métodos devem ser todos
- * privados</strong> e eles não serão invocados diretamente pelo simulador.
- * <br><br>
- * Os únicos métodos públicos devem ser: getEstresse, trabalhar, estressar e
- * estressarMuito.
  *
- * @author Iuri
+ * @author Iuri da Silva Fernandes
+ * @version 1.0
  */
 public class Burocrata {
     private int estresse = 0;
@@ -27,8 +20,12 @@ public class Burocrata {
     /**
      * Construtor de Burocrata.
      *
+     * <p>Internamente instancia a Classe Utilitária {@code ManipuladorDeProcesso}.</p>
+     *
      * @param m mesa com os processos
      * @param u universidade com os montes dos cursos e a secretaria
+     * @see ManipuladorDeProcesso
+     * @since 1.0
      */
     public Burocrata(Mesa m, Universidade u) {
         this.mesa = m;
@@ -36,14 +33,30 @@ public class Burocrata {
         manipuladorDeProcesso = new ManipuladorDeProcesso(universidade);
     }
 
+    /**
+     * Retorna o estresse do {@code Burocrata}.
+     *
+     * @return o estresse do {@code Burocrata}
+     * @since 1.0
+     */
     public int getEstresse() {
         return estresse;
     }
 
+    /**
+     * Aumenta o estresse do {@code Burocrata} em 1.
+     *
+     * @since 1.0
+     */
     public void estressar() {
         estresse++;
     }
 
+    /**
+     * Aumenta o estresse do {@code Burocrata} em 10.
+     *
+     * @since 1.0
+     */
     public void estressarMuito() {
         estresse += 10;
     }
@@ -53,16 +66,7 @@ public class Burocrata {
      * <br><br>
      * Esse método é o único método de controle invocado durante a simulação
      * da universidade.
-     * <br><br>
-     * Aqui podem ser feitas todas as verificações sobre os documentos nos
-     * montes dos cursos e dos processos abertos na mesa do Burocrata. A partir
-     * dessas informações, você pode colocar documentos nos processos abertos
-     * e despachar os processos para a secretaria acadêmica.
-     * <br><br>
-     * Cuidado com a complexidade do seu algoritmo, porque se ele demorar muito
-     * serão criados menos documentos na sua execução e sua produtividade geral
-     * vai cair.
-     * <br><br>
+     * <br></br>
      * Esse método será chamado a cada 100 milissegundos pelo simulador da
      * universidade.
      * <br><br>
@@ -71,9 +75,12 @@ public class Burocrata {
      * para os montes dos cursos todos os documentos que você removeu dos montes
      * dos cursos.
      *
+     * <p>Todos os {@code Processos} são manipulados por {@code ManipuladorProcessos}.</p>
+     *
      * @see professor.entidades.Universidade#despachar(Processo)
      * @see professor.entidades.Universidade#removerDocumentoDoMonteDoCurso(estudantes.entidades.Documento, professor.entidades.CodigoCurso)
      * @see professor.entidades.Universidade#devolverDocumentoParaMonteDoCurso(estudantes.entidades.Documento, professor.entidades.CodigoCurso)
+     * @see ManipuladorDeProcesso
      */
     public void trabalhar() {
         for (int i = 0; i < 5; i++) {

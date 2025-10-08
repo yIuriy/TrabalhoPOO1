@@ -21,8 +21,8 @@ public class Norma extends DocumentoAdministrativo {
      * <p>Utiliza o construtor da superclasse {@link DocumentoAdministrativo} através de {@code super()} para inicializar os atributos
      * herdados.</p>
      *
-     * @param criador     o criador do {@code Norma}
-     * @param codigoCurso o {@code Curso} ao qual este {@code Norma} está associado
+     * @param criador     o criador da {@code Norma}
+     * @param codigoCurso o {@code Curso} ao qual esta {@code Norma} está associada
      * @param paginas     a quantidade de páginas
      * @param numero      o número da {@code Norma}
      * @param valido      se a {@code Norma} está válida
@@ -31,7 +31,6 @@ public class Norma extends DocumentoAdministrativo {
      * @see Documento
      * @see DocumentoAdministrativo
      * @since 1.0
-     *
      */
     public Norma(String criador, CodigoCurso codigoCurso, int paginas,
                  int numero, boolean valido, String texto) {
@@ -81,7 +80,7 @@ public class Norma extends DocumentoAdministrativo {
      * </ul>
      *
      * @param o o objeto a ser comparado
-     * @return {@code true} se ambos os Objetos forem instâncias de {@code Deliberacao} e possuírem os mesmo valores
+     * @return {@code true} se ambos os Objetos forem instâncias de {@code Norma} e possuírem os mesmo valores
      * nos atributos herdados e nos campos {@code numero}, {@code valido} e {@code texto}; {@code false} caso contrário
      * @see #hashCode()
      * @see DocumentoAdministrativo#equals(Object)

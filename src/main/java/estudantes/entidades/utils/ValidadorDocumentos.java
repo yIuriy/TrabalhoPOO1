@@ -2,7 +2,6 @@ package estudantes.entidades.utils;
 
 import estudantes.entidades.*;
 
-import javax.print.Doc;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,7 +17,6 @@ import static professor.entidades.CodigoCurso.*;
  * @author Iuri da Silva Fenrnandes
  * @version 1.0
  * @see estudantes.entidades.Burocrata
- *
  */
 public abstract class ValidadorDocumentos {
 
@@ -39,8 +37,6 @@ public abstract class ValidadorDocumentos {
      * @see DocumentoAdministrativo
      * @see Burocrata
      * @since 1.0
-     *
-     *
      */
     protected static boolean verificarSeAdicionaAtaVerificandoPorElementoAnterior(Documento[] documentos, Documento documento) {
         if (!(documento instanceof Ata)) {
@@ -71,8 +67,6 @@ public abstract class ValidadorDocumentos {
      * @see Burocrata
      * @see ValidadorDocumentos#verificarSeODocumentoEDePosGraduacao(Documento)
      * @since 1.0
-     *
-     *
      */
     protected static boolean verificarSeAdicionaDocumentoPorNivelDeEducacao(Documento[] documentos, Documento documento) {
         if (verificarSeODocumentoEDePosGraduacao(documento)) { // é pós-graduação
@@ -103,8 +97,6 @@ public abstract class ValidadorDocumentos {
      * @see DocumentoAdministrativo
      * @see Burocrata
      * @since 1.0
-     *
-     *
      */
     protected static boolean verificarSeAdicionarDocumentoPorTipo(Documento[] documentos, Documento documento) {
         if (documento instanceof Ata) {
@@ -136,8 +128,6 @@ public abstract class ValidadorDocumentos {
      * @see Documento
      * @see Burocrata
      * @since 1.0
-     *
-     *
      */
     protected static boolean verificarSeAdicionaDocumentoPorQuantidadeDePaginas(Documento[] documentos, Documento documento) {
         int totalPaginas = Arrays.stream(documentos).mapToInt(Documento::getPaginas).sum();
@@ -166,7 +156,6 @@ public abstract class ValidadorDocumentos {
      * @see Documento#getPaginas()
      * @see Burocrata
      * @since 1.0
-     *
      */
     protected static boolean verificarSeJaExisteDocumentoSubstancial(Documento[] documentos) {
         return Arrays.stream(documentos).anyMatch(doc ->
@@ -191,12 +180,10 @@ public abstract class ValidadorDocumentos {
      * @return {@code true} se o {@code Documento} não é {@code Portaria} ou {@code Edital}, se não é um {@code
      * Documento} Substancial ou se é {@code Documento} Substancial e a lista de {@code Documentos} está vazia;
      * {@code false} se é um {@code Documento} Substancial e a lista não está vazia
-     * @since 1.0
-     *
      * @see Edital
      * @see Portaria
      * @see Burocrata
-     *
+     * @since 1.0
      */
     protected static boolean verificarSeAdicionaDocumentoSubstancial(Documento[] documentos, Documento documento) {
         if (!(documento instanceof Portaria || documento instanceof Edital)) {
@@ -215,7 +202,6 @@ public abstract class ValidadorDocumentos {
         return verificarSeAListaDeDocumentosEstaVazia(documentos);
     }
 
-
     /**
      * Verifica se é válido adicionar um {@code Circular} ou {@code Ofício} na lista.
      *
@@ -231,11 +217,10 @@ public abstract class ValidadorDocumentos {
      * @return {@code true} se o {@code Documento} não seja {@code Circular} ou {@code Ofício} e se o {@code
      * Documento} possui algum destinatário em comum com os já existentes na lista; {@code false} se o {@code
      * Documento} não possui nenhum destinatário em comum com os já existentes na lista
-     * @since 1.0
      * @see Oficio
      * @see Circular
      * @see Burocrata
-     *
+     * @since 1.0
      */
     protected static boolean verificarSeAdicionaDocumentoCasoCircularesEOficio(Documento[] documentos, Documento documento) {
         if (!(documento instanceof Circular || documento instanceof Oficio)) {
@@ -311,13 +296,11 @@ public abstract class ValidadorDocumentos {
      * {@code Certificado} e {@code Diploma} e a lista contém pelo menos um {@code Diploma} e se {@code Documento} é um
      * {@code Diploma} e a lista contém {@code Documentos} que não são {@code Ata}, {@code Certificado} ou {@code
      * Diploma}
-     * @since 1.0
-     *
      * @see Ata
      * @see Diploma
      * @see Certificado
      * @see Burocrata
-     *
+     * @since 1.0
      */
     protected static boolean verificarSeAdicionaDocumentoCasoDiploma(Documento[] documentos, Documento documento) {
         if (!(documento instanceof Diploma)) {
@@ -337,7 +320,6 @@ public abstract class ValidadorDocumentos {
         }
     }
 
-
     /**
      * Verifica se é válido adicionar um {@code Atestado} na lista.
      *
@@ -356,13 +338,11 @@ public abstract class ValidadorDocumentos {
      * presente na lista ou se a categoria do {@code Atestado} passado é o mesmo dos {@code Atestados} presentes na
      * lista; {@code false} se a categoria do {@code Atestado} passado é diferente da categoria dos {@code Atestados}
      * presentes na lista
-     * @since 1.0
      * @see Atestado
      * @see Burocrata
      * @see List#contains(Object)
      * @see java.util.stream.Stream#noneMatch(Predicate)
-     *
-     *
+     * @since 1.0
      */
     protected static boolean verificarSeAdicionaDocumentoCasoAtestado(Documento[] documentos, Documento documento) {
         if (!(documento instanceof Atestado)) {
@@ -397,13 +377,10 @@ public abstract class ValidadorDocumentos {
      * @param documentos a lista de documentos existentes no processo
      * @return {@code true} se {@code documentos.length == 0}; {@code false} caso contrário
      * @since 1.0
-     *
-     *
      */
     protected static boolean verificarSeAListaDeDocumentosEstaVazia(Documento[] documentos) {
         return documentos.length == 0;
     }
-
 
     /**
      * Verifica se o {@code Documento} é de Pós-Graduação.
@@ -419,11 +396,10 @@ public abstract class ValidadorDocumentos {
      * @return {@code true} se o {@code Documento.getCodigoCurso} corresponde à {@code POS_GRADUACAO_ENGENHARIA} ou
      * {@code POS_GRADUACAO_ENGENHARIA_ELETRICA} ou {@code POS_GRADUACAO_ENGENHARIA_SOFTWARE}; {@code false} caso
      * contrário
-     * @since 1.0-
      * @see professor.entidades.CodigoCurso
      * @see Documento#getCodigoCurso()
      * @see ValidadorDocumentos#verificarSeAdicionaDocumentoPorNivelDeEducacao(Documento[], Documento)
-     *
+     * @since 1.0
      */
     protected static boolean verificarSeODocumentoEDePosGraduacao(Documento documento) {
         return documento.getCodigoCurso() == POS_GRADUACAO_ENGENHARIA || documento.getCodigoCurso() == POS_GRADUACAO_ENGENHARIA_ELETRICA

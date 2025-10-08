@@ -24,8 +24,6 @@ public abstract class Documento {
      * @param codigoCurso o {@code Curso} ao qual este {@code Documento} está associado
      * @param paginas     a quantidade de páginas do {@code Documento}
      * @see CodigoCurso
-     *
-     *
      */
     public Documento(String criador, CodigoCurso codigoCurso, int paginas) {
         this.criador = criador;
@@ -38,7 +36,6 @@ public abstract class Documento {
      *
      * @return o criador do {@code Documento}
      * @since 1.0
-     *
      */
     public String getCriador() {
         return criador;
@@ -49,8 +46,6 @@ public abstract class Documento {
      *
      * @return o criador do {@code Documento}
      * @since 1.0
-     *
-     *
      */
     public CodigoCurso getCodigoCurso() {
         return codigoCurso;
@@ -61,8 +56,6 @@ public abstract class Documento {
      *
      * @return o número de páginas do {@code Documento}
      * @since 1.0
-     *
-     *
      */
     public int getPaginas() {
         return paginas;
@@ -84,7 +77,6 @@ public abstract class Documento {
         Documento documento = (Documento) o;
         return paginas == documento.paginas && Objects.equals(criador, documento.criador) && codigoCurso == documento.codigoCurso;
     }
-
 
     /**
      * Retorna o código hash deste {@code Documento}.

@@ -2,8 +2,6 @@ package estudantes.entidades;
 
 import professor.entidades.CodigoCurso;
 
-import java.util.Objects;
-
 /**
  * Representa um {@code DocumentoAdministrativo}, que é uma especialização <strong>abstrata</strong> de {@code Documento}.
  *
@@ -28,7 +26,6 @@ public abstract class DocumentoAdministrativo extends Documento {
      * @see CodigoCurso
      * @see Documento
      * @since 1.0
-     *
      */
     public DocumentoAdministrativo(String criador, CodigoCurso codigoCurso, int paginas) {
         super(criador, codigoCurso, paginas);

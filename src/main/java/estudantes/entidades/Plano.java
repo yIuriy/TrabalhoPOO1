@@ -32,7 +32,6 @@ public class Plano extends DocumentoAcademico {
      * @see Documento
      * @see DocumentoAcademico
      * @since 1.0
-     *
      */
     public Plano(String criador, CodigoCurso codigoCurso, int paginas, long autenticacao,
                  String responsavel, String[] planejamento) {
@@ -46,7 +45,6 @@ public class Plano extends DocumentoAcademico {
      *
      * @return o responsável pelo {@code Plano}
      * @since 1.0
-     *
      */
     public String getResponsavel() {
         return responsavel;
@@ -58,7 +56,6 @@ public class Plano extends DocumentoAcademico {
      *
      * @return {@code String[]} com o planejamento do {@code Plano}
      * @since 1.0
-     *
      */
     public String[] getPlanejamento() {
         return planejamento;

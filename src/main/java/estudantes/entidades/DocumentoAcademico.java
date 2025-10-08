@@ -30,8 +30,6 @@ public abstract class DocumentoAcademico extends Documento {
      * @see CodigoCurso
      * @see Documento
      * @since 1.0
-     *
-     *
      */
     public DocumentoAcademico(String criador, CodigoCurso codigoCurso,
                               int paginas, long autenticacao) {
@@ -44,12 +42,10 @@ public abstract class DocumentoAcademico extends Documento {
      *
      * @return o número de autenticação do {@code DocumentoAcademico}
      * @since 1.0
-     *
      */
     public long getAutenticacao() {
         return autenticacao;
     }
-
 
     /**
      * Compara este {@code DocumentoAcademico} com o objeto especificado para verificar igualdade.

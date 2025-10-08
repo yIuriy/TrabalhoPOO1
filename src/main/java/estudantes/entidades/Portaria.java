@@ -2,7 +2,6 @@ package estudantes.entidades;
 
 import professor.entidades.CodigoCurso;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -32,7 +31,6 @@ public class Portaria extends Norma {
      * @see DocumentoAdministrativo
      * @see Norma
      * @since 1.0
-     *
      */
     public Portaria(String criador, CodigoCurso codigoCurso, int paginas, int numero,
                     boolean valido, String texto, int anoInicio) {
@@ -74,7 +72,6 @@ public class Portaria extends Norma {
         Portaria portaria = (Portaria) o;
         return anoInicio == portaria.anoInicio;
     }
-
 
     /**
      * Retorna o código hash deste {@code Portaria}.
