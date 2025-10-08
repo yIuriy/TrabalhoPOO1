@@ -1,8 +1,6 @@
 package estudantes.entidades;
 
-import estudantes.entidades.utils.Impressores;
 import estudantes.entidades.utils.ManipuladorDeProcesso;
-import estudantes.entidades.utils.Validadores;
 import professor.entidades.Mesa;
 import professor.entidades.Processo;
 import professor.entidades.Universidade;
