@@ -87,10 +87,10 @@ public class Certificado extends Registro {
      * o campo {@code descricao}.</p>
      *
      * @return o código hash do objeto
-     * @since 1.0
      * @see #equals(Object)
      * @see Objects#hash(Object...)
      * @see Registro#hashCode()
+     * @since 1.0
      */
     @Override
     public int hashCode() {

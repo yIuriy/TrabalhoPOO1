@@ -2,7 +2,6 @@ package estudantes.entidades;
 
 import professor.entidades.CodigoCurso;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -10,7 +9,7 @@ import java.util.Objects;
  *
  * @author Iuri da Silva Fernandes
  * @version 1.0
- * @see Documento
+ * @see DocumentoAcademico
  */
 public class Registro extends DocumentoAcademico {
     private String estudante;
@@ -24,9 +23,9 @@ public class Registro extends DocumentoAcademico {
      * @param criador      o criador do {@code Registro}
      * @param codigoCurso  o {@code Curso} ao qual este {@code Registro} está associado
      * @param paginas      a quantidade de páginas
-     * @param autenticacao o número da autorização
+     * @param autenticacao o número da autenticação
      * @param estudante    o estudante do {@code Registro}
-     * @param matricula    o número da matrícula do {@code Plano}
+     * @param matricula    o número da matrícula do estudante associado ao {@code Plano}
      * @see CodigoCurso
      * @see Documento
      * @see DocumentoAcademico
@@ -51,11 +50,10 @@ public class Registro extends DocumentoAcademico {
         return estudante;
     }
 
-
     /**
      * Retorna a matrícula do {@code Registro}.
      *
-     * @return a matrícula do {@code Registro}
+     * @return a matrícula do estudante associado ao {@code Registro}
      * @since 1.0
      *
      */

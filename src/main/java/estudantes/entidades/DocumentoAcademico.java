@@ -13,7 +13,7 @@ import java.util.Objects;
  * @version 1.0
  * @see Documento
  */
-public abstract class DocumentoAcademico extends Documento{
+public abstract class DocumentoAcademico extends Documento {
     private long autenticacao;
 
     /**
@@ -23,16 +23,16 @@ public abstract class DocumentoAcademico extends Documento{
      *
      * <p>Não é utilizado diretamente, servindo para ser herdado pelas subclasses de {@code DocumentoAcademico}.</p>
      *
-     * @param criador o criador do {@code DocumentoAcademico}
-     * @param codigoCurso o {@code Curso} ao qual este {@code DocumentoAcademico} está associado
-     * @param paginas a quantidade de páginas
+     * @param criador      o criador do {@code DocumentoAcademico}
+     * @param codigoCurso  o {@code Curso} ao qual este {@code DocumentoAcademico} está associado
+     * @param paginas      a quantidade de páginas
      * @param autenticacao o número da autorização
-     *
-     * @since 1.0
      * @see CodigoCurso
      * @see Documento
+     * @since 1.0
      *
-     * */
+     *
+     */
     public DocumentoAcademico(String criador, CodigoCurso codigoCurso,
                               int paginas, long autenticacao) {
         super(criador, codigoCurso, paginas);
@@ -44,7 +44,8 @@ public abstract class DocumentoAcademico extends Documento{
      *
      * @return o número de autenticação do {@code DocumentoAcademico}
      * @since 1.0
-     * */
+     *
+     */
     public long getAutenticacao() {
         return autenticacao;
     }
@@ -58,10 +59,10 @@ public abstract class DocumentoAcademico extends Documento{
      *   <li>Os campos herdados de {@code Documento}, por meio de {@code super.equals(o)};</li>
      *   <li>O campo {@code autenticacao} desta classe.</li>
      * </ul>
+     *
      * @param o o objeto a ser comparado
      * @return {@code true} se ambos os Objetos forem instâncias de {@code DocumentoAcademico} e possuírem os mesmo valores
      * nos atributos herdados e no campo {@code autenticacao}; {@code false} caso contrário
-     *
      * @see #hashCode()
      * @see Documento#equals(Object)
      * @since 1.0
@@ -84,7 +85,6 @@ public abstract class DocumentoAcademico extends Documento{
      * {@code autenticacao}.</p>
      *
      * @return o código hash do objeto
-     *
      * @see #equals(Object)
      * @see Objects#hash(Object...)
      * @see Documento#hashCode()

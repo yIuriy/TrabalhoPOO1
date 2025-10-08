@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Classe abstrata que representa um documento genérico.
  * <p>Todos os documentos do sistema herdam de {@code Documento}.</p>
- * 
+ *
  * @author Iuri da Silva Fernandes
  * @version 1.0
  */
@@ -20,13 +20,13 @@ public abstract class Documento {
      * Cria uma instância de {@code Documento}.
      * <p>Não é utilizado diretamente, servindo para ser herdado pelas subclasses de {@code Documento}.</p>
      *
-     * @param criador o criador do {@code Documento}
+     * @param criador     o criador do {@code Documento}
      * @param codigoCurso o {@code Curso} ao qual este {@code Documento} está associado
-     * @param paginas a quantidade de páginas do {@code Documento}
-     *
+     * @param paginas     a quantidade de páginas do {@code Documento}
      * @see CodigoCurso
      *
-     * */
+     *
+     */
     public Documento(String criador, CodigoCurso codigoCurso, int paginas) {
         this.criador = criador;
         this.codigoCurso = codigoCurso;
@@ -37,9 +37,9 @@ public abstract class Documento {
      * Retorna o criador do {@code Documento}.
      *
      * @return o criador do {@code Documento}
-     *
      * @since 1.0
-     * */
+     *
+     */
     public String getCriador() {
         return criador;
     }
@@ -48,10 +48,10 @@ public abstract class Documento {
      * Retorna o código do curso do {@code Documento}.
      *
      * @return o criador do {@code Documento}
-     *
      * @since 1.0
      *
-     * */
+     *
+     */
     public CodigoCurso getCodigoCurso() {
         return codigoCurso;
     }
@@ -60,10 +60,10 @@ public abstract class Documento {
      * Retorna o número de páginas do {@code Documento}.
      *
      * @return o número de páginas do {@code Documento}
-     *
      * @since 1.0
      *
-     * */
+     *
+     */
     public int getPaginas() {
         return paginas;
     }
@@ -75,7 +75,6 @@ public abstract class Documento {
      *
      * @param o o objeto a ser comparado
      * @return {@code true} se os objetos forem iguais; {@code false} caso contrário
-     *
      * @see #hashCode()
      * @since 1.0
      */
@@ -94,7 +93,6 @@ public abstract class Documento {
      * iguais produzem o mesmo código hash.</p>
      *
      * @return o código hash do objeto
-     *
      * @see #equals(Object)
      * @see Objects#hash(Object...)
      * @since 1.0

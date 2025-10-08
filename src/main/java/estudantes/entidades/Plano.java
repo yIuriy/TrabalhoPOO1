@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author Iuri da Silva Fernandes
  * @version 1.0
- * @see Documento
+ * @see DocumentoAcademico
  */
 public class Plano extends DocumentoAcademico {
     private String responsavel;
@@ -25,7 +25,7 @@ public class Plano extends DocumentoAcademico {
      * @param criador      o criador do {@code Plano}
      * @param codigoCurso  o {@code Curso} ao qual este {@code Plano} está associado
      * @param paginas      a quantidade de páginas
-     * @param autenticacao o número da autorização
+     * @param autenticacao o número da autenticação
      * @param responsavel  o responsável pelo {@code Plano}
      * @param planejamento o planejamento do {@code Plano}
      * @see CodigoCurso
@@ -64,14 +64,13 @@ public class Plano extends DocumentoAcademico {
         return planejamento;
     }
 
-
     /**
      * Compara este {@code Plano} com o objeto especificado para verificar igualdade.
      *
      * <p>A comparação considera:
      * <ul>
      *   <li>Os campos herdados de {@code DocumentoAcademico}, por meio de {@code super.equals(o)};</li>
-     *   <li>Os campo {@code responsavel} e {@code planejamento} desta classe.</li>
+     *   <li>Os campos {@code responsavel} e {@code planejamento} desta classe.</li>
      * </ul>
      *
      * @param o o objeto a ser comparado

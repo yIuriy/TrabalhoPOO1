@@ -34,6 +34,7 @@ public class Historico extends Registro {
      * @see CodigoCurso
      * @see Documento
      * @see DocumentoAcademico
+     * @see Registro
      * @since 1.0
      *
      */
@@ -78,11 +79,11 @@ public class Historico extends Registro {
      * @param o o objeto a ser comparado
      * @return {@code true} se ambos os Objetos forem instâncias de {@code Historico} e possuírem os mesmo valores
      * nos atributos herdados e nos campos {@code coeficiente} e {@code componentes}; {@code false} caso contrário
-     * @since 1.0
      * @see #hashCode()
      * @see Registro#equals(Object)
      * @see Double#compare(double, double)
      * @see Arrays#equals(Object[], Object[])
+     * @since 1.0
      */
     @Override
     public boolean equals(Object o) {
@@ -102,11 +103,11 @@ public class Historico extends Registro {
      * os campos {@code coeficiente} e {@code componentes}.</p>
      *
      * @return o código hash do objeto
-     * @since 1.0
      * @see #equals(Object)
      * @see Objects#hash(Object...)
      * @see Arrays#hashCode(Object[])
      * @see Registro#hashCode()
+     * @since 1.0
      */
     @Override
     public int hashCode() {
